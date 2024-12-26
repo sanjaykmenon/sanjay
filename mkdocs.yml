@@ -1,1 +1,10 @@
-site_name: My Docs
+site_name: Sanjay's Blog
+site_url: https://mydomain.org/mysite
+theme:
+  name: material
+  features:
+    - search.suggest
+plugins:
+  - blog
+  - search
+
