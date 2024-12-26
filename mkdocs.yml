@@ -4,6 +4,17 @@ theme:
   name: material
   features:
     - search.suggest
+  palette:
+  
+    - scheme: indigo
+      toggle:
+        icon: material/lightbulb
+        name: Switch to Dark Mode
+    
+    - scheme: slate
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to Light Mode
 plugins:
   - blog
   - search
