@@ -121,6 +121,41 @@ Do not use them as a reason to skip system design.
 
 A stronger model can still confuse Service Center findings with AAO findings. It can still miss a redaction. It can still return a plausible but wrong legal extraction. The system still needs grounding, schemas, and review.
 
+## Gemma model and quantization research to add
+
+Status: this research has not been done yet. The post should include it as a future work or open design question unless we run the experiments before publishing.
+
+The extraction runs used a local Gemma model through LM Studio. The draft should explain that the exact model version and quantization matter because this is a legal extraction task, not a casual chat task.
+
+Questions to research:
+
+* How does the local quantized Gemma model compare with a full precision Gemma model on the same 50 document calibration set?
+* How much quality is lost from quantization, if any, on schema following, legal finding accuracy, and quote grounding?
+* Does a larger Gemma variant improve legal reasoning enough to justify higher GPU cost?
+* Does a smaller Gemma variant keep enough quality while improving speed and cost?
+* Which quantization format matters for Modal or other cloud runs, such as GGUF, AWQ, GPTQ, or a vLLM compatible format?
+* Does the quantized model preserve the long context behavior needed for large AAO decisions?
+* Does quantization change error types, such as more JSON failures, more confused findings, or more missing evidence?
+* Does temperature 0 behave the same across quantized and non quantized variants?
+
+Tradeoffs to explain:
+
+* A quantized model uses less memory and can run on cheaper hardware.
+* A quantized model may be faster and easier to serve.
+* A quantized model can lose accuracy, especially on exact wording, long context, or hard legal distinctions.
+* A full precision model may be more faithful, but it needs a larger GPU and costs more to run.
+* A cloud run may not be able to use the exact same LM Studio quantization, so the team may need to revalidate quality on the Modal version.
+
+The right experiment is simple:
+
+1. Use the same 50 document calibration set.
+2. Run the same prompts and schemas.
+3. Compare strict Tier A, OCR tolerant Tier A, and Tier B judge results.
+4. Track runtime, memory, cost, JSON failure rate, and retry rate.
+5. Inspect a few changed decisions by hand, especially where one model changes `met`, `not_met`, or `not_reached`.
+
+The post should frame this as a practical model selection question. The goal is not to find the newest or largest Gemma model. The goal is to find the cheapest model that still preserves the legal distinctions that matter.
+
 ## Extraction design
 
 Explain the movement from one pass to multi pass extraction.
